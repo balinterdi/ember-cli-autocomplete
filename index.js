@@ -2,5 +2,8 @@
 'use strict';
 
 module.exports = {
-  name: 'ember-cli-autocomplete'
+  name: 'ember-cli-autocomplete',
+  isDevelopingAddon: function() {
+    return true;
+  }
 };
