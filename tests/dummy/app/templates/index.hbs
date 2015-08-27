@@ -40,14 +40,16 @@
     <thead>
       <th>Id</th>
       <th>Name</th>
+      <th></th>
     </thead>
     <tbody>
       <tr>
         {{#if selectedArtist}}
           <td>{{selectedArtist.id}}</td>
           <td>{{selectedArtist.name}}</td>
+          <td><img height="50" width="50" src={{selectedArtist.img}} alt={{selectedArtist.name}} title={{selectedArtist.name}} border="0" /></td>
         {{else}}
-          <td colspan="2">No artist is selected.</td>
+          <td colspan="3">No artist is selected.</td>
         {{/if}}
       </tr>
     </tbody>
