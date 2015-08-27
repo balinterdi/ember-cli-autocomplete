@@ -1,0 +1,55 @@
+<div class="col-md-6">
+  <div class="form-group">
+    <label>Choose an artist</label>
+    {{#auto-complete
+          on-select=(action "selectArtist")
+          on-input=(action "filterArtists")
+          class="autocomplete-container" as |autocomplete isDropdownOpen inputValue onSelect onInput|}}
+      <div class="input-group">
+        {{auto-complete-input
+            autocomplete_=autocomplete
+            value=inputValue
+            on-change=onInput
+            type="text"
+            class="combobox input-large form-control"
+            placeholder="Select an artist"}}
+        {{#auto-complete-list autocomplete=autocomplete isVisible=isDropdownOpen class="typeahead typeahead-long dropdown-menu" as |list|}}
+          {{#each matchingArtists as |artist|}}
+            {{#auto-complete-option
+                id=artist.id
+                label=artist.name
+                item=artist
+                list=list
+                on-click=onSelect
+                activeId=selectedArtist.id}}
+              <a href="#">{{artist.name}}</a>
+            {{/auto-complete-option}}
+          {{else}}
+            <li><a href="#">No results.</a></li>
+          {{/each}}
+        {{/auto-complete-list}}
+        {{#auto-complete-dropdown-toggle autocomplete=autocomplete class="input-group-addon dropdown-toggle"}}
+          <span class="caret"></span>
+        {{/auto-complete-dropdown-toggle}}
+      </div>
+    {{/auto-complete}}
+  </div>
+</div>
+<div class="col-md-6">
+  <table class="table">
+    <thead>
+      <th>Id</th>
+      <th>Name</th>
+    </thead>
+    <tbody>
+      <tr>
+        {{#if selectedArtist}}
+          <td>{{selectedArtist.id}}</td>
+          <td>{{selectedArtist.name}}</td>
+        {{else}}
+          <td colspan="2">No artist is selected.</td>
+        {{/if}}
+      </tr>
+    </tbody>
+  </table>
+</div>
