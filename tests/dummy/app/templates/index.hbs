@@ -36,22 +36,33 @@
   </div>
 </div>
 <div class="col-md-6">
-  <table class="table">
-    <thead>
-      <th>Id</th>
-      <th>Name</th>
-      <th></th>
-    </thead>
-    <tbody>
-      <tr>
-        {{#if selectedArtist}}
-          <td>{{selectedArtist.id}}</td>
-          <td>{{selectedArtist.name}}</td>
-          <td><img height="50" width="50" src={{selectedArtist.img}} alt={{selectedArtist.name}} title={{selectedArtist.name}} border="0" /></td>
-        {{else}}
-          <td colspan="3">No artist is selected.</td>
-        {{/if}}
-      </tr>
-    </tbody>
-  </table>
+  <div class="panel-default">
+    <label>Chosen artist</label>
+    <div class="panel-body artist-card">
+      {{#if selectedArtist}}
+      <div class="artist-column">
+        <img height="150" width="150" src={{selectedArtist.img}} alt={{selectedArtist.name}} title={{selectedArtist.name}} border="0" />
+      </div>
+      <div class="artist-column">
+        <h4>{{selectedArtist.name}}</h4>
+        <div class="artist-props">
+          <p><strong>Age: </strong>{{selectedArtist.age}}</p>
+          <p>
+            <strong>Bands: </strong>
+            <ul class="artist-bands-list">
+              {{#each selectedArtist.bands as |band|}}
+              <li>{{band}}</li>
+              {{/each}}
+            </ul>
+          </p>
+          <p></p>
+        </div>
+      </div>
+      {{else}}
+      <div class="col-md-12">
+        No artist is selected.
+      </div>
+      {{/if}}
+    </div>
+  </div>
 </div>

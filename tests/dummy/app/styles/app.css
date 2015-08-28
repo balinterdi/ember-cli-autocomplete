@@ -2,6 +2,25 @@ html, body {
   margin: 20px;
 }
 
+.artist-card {
+  border-width: 1px;
+  border-style: solid;
+  border-color: inherit;
+  border-radius: 3px;
+}
+
+.artist-column {
+  float: left;
+}
+
+.artist-bands-list {
+  list-style: none;
+}
+
+.artist-column + .artist-column {
+  margin-left: 10px;
+}
+
 /* This is copied from .dropdown-menu > li > a:hover in Bootstrap */
 
 .ember-autocomplete-list > .active > a {
