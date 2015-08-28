@@ -14,5 +14,10 @@ module.exports = function(defaults) {
   */
   app.import('bower_components/bootstrap/dist/css/bootstrap.css');
   app.import('bower_components/bootstrap/dist/css/bootstrap.css.map', { destDir: 'assets' });
+  app.import('bower_components/roboto-fontface/fonts/Roboto-Regular.eot', { destDir: 'fonts' });
+  app.import('bower_components/roboto-fontface/fonts/Roboto-Regular.svg', { destDir: 'fonts' });
+  app.import('bower_components/roboto-fontface/fonts/Roboto-Regular.ttf', { destDir: 'fonts' });
+  app.import('bower_components/roboto-fontface/fonts/Roboto-Regular.woff', { destDir: 'fonts' });
+  app.import('bower_components/roboto-fontface/fonts/Roboto-Regular.woff2', { destDir: 'fonts' });
   return app.toTree();
 };

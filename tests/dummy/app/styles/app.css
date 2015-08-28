@@ -1,5 +1,6 @@
 html, body {
   margin: 20px;
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
 }
 
 .artist-card {
