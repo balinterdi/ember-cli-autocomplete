@@ -4,7 +4,7 @@
     {{#auto-complete
           on-select=(action "selectArtist")
           on-input=(action "filterArtists")
-          class="autocomplete-container" as |autocomplete isDropdownOpen inputValue onSelect onInput|}}
+          class="autocomplete-container" as |autocomplete isDropdownOpen inputValue toggleDropdown onSelect onInput|}}
       <div class="input-group">
         {{auto-complete-input
             autocomplete_=autocomplete
@@ -28,7 +28,7 @@
             <li><a href="#">No results.</a></li>
           {{/each}}
         {{/auto-complete-list}}
-        {{#auto-complete-dropdown-toggle autocomplete=autocomplete class="input-group-addon dropdown-toggle"}}
+        {{#auto-complete-dropdown-toggle on-click=toggleDropdown class="input-group-addon dropdown-toggle"}}
           <span class="caret"></span>
         {{/auto-complete-dropdown-toggle}}
       </div>

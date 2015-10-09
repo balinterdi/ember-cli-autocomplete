@@ -146,10 +146,15 @@ export default Ember.Component.extend({
           this.get('on-select')(firstOption.get('item'));
           this.set('inputValue', autocompletedLabel);
           Ember.run.next(this, () => {
+            //TODO: Can this be replaced by passing down selectionStart and selectionEnd to the input?
             this.get('input.element').setSelectionRange(value.length, autocompletedLabel.length);
           });
         }
       });
+    },
+
+    toggleDropdown() {
+      this.toggleDropdown();
     }
   }
 });
