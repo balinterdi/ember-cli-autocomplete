@@ -28,7 +28,7 @@ export default Ember.Component.extend({
     this.get('list').unregisterOption(this);
   }),
 
-  toggleDropdown: Ember.on('click', function() {
+  selectOption: Ember.on('click', function() {
     const item = this.get('item');
     this.get('on-click')(item, this.get('label'));
   }),
