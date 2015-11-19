@@ -46,7 +46,6 @@ test('it works', function(assert) {
         as |ac isOpen inputValue toggleDropdown onSelect onInput|}}
         {{auto-complete-input
             class="auto-complete-input"
-            autocomplete_=ac
             value=inputValue
             on-change=onInput
             type="text"}}

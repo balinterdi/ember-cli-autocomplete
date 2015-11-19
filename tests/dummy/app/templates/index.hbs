@@ -4,10 +4,10 @@
     {{#auto-complete
           on-select=(action "selectArtist")
           on-input=(action "filterArtists")
-          class="autocomplete-container" as |autocomplete isDropdownOpen inputValue toggleDropdown onSelect onInput|}}
+          class="autocomplete-container" as |autocomplete isDropdownOpen inputValue
+                                             toggleDropdown onSelect onInput|}}
       <div class="input-group">
         {{auto-complete-input
-            autocomplete_=autocomplete
             value=inputValue
             on-change=onInput
             type="text"

@@ -134,20 +134,22 @@ export default Ember.Component.extend({
     inputDidChange(value) {
       this.get('on-input')(value);
       this.set('isDropdownOpen', true);
-      Ember.run.scheduleOnce('afterRender', this, function() {
+      return new Ember.RSVP.Promise((resolve, reject) => {
         if (this.get('isBackspacing')) {
           this.set('isBackspacing', false);
-          return;
-        }
-        const firstOption = this.get('list.firstOption');
-        if (firstOption) {
-          const autocompletedLabel = firstOption.get('label');
-          this.set('focusedOption', firstOption);
-          this.get('on-select')(firstOption.get('item'));
-          this.set('inputValue', autocompletedLabel);
-          Ember.run.next(this, () => {
-            //TODO: Can this be replaced by passing down selectionStart and selectionEnd to the input?
-            this.get('input.element').setSelectionRange(value.length, autocompletedLabel.length);
+          reject();
+        } else {
+          Ember.run.scheduleOnce('afterRender', this, function() {
+            const firstOption = this.get('list.firstOption');
+            if (firstOption) {
+              const autocompletedLabel = firstOption.get('label');
+              this.set('focusedOption', firstOption);
+              this.get('on-select')(firstOption.get('item'));
+              this.set('inputValue', autocompletedLabel);
+              Ember.run.next(this, () => {
+                resolve({ start: value.length, end: autocompletedLabel.length });
+              });
+            }
           });
         }
       });
