@@ -7,16 +7,10 @@ export default Ember.Component.extend({
   classNameBindings: w('isActive:active isFocused:focused'),
 
   list: null,
-  id: null,
   label: null,
   item: null,
-  activeId: null,
 
   isFocused: false,
-
-  isActive: Ember.computed('id', 'activeId', function() {
-    return this.get('id') === this.get('activeId');
-  }),
 
   autocomplete: Ember.computed.reads('list.autocomplete'),
 

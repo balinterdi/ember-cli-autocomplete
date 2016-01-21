@@ -21,7 +21,7 @@
                 item=artist
                 list=list
                 on-click=onSelect
-                activeId=selectedArtist.id}}
+                isActive=(eq selectedArtist.id artist.id)}}
               <a href="#">{{artist.name}}</a>
             {{/auto-complete-option}}
           {{else}}
