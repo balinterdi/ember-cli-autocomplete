@@ -11,6 +11,9 @@ export default Ember.Component.extend({
   input: null,
   inputValue: '',
   list: null,
+  focusedIndex: null,
+  selectedIndex: null,
+  optionsLength: 0,
 
   isBackspacing: false,
   options: Ember.computed.reads('list.options'),
@@ -61,56 +64,40 @@ export default Ember.Component.extend({
 
   focusPrevious: function(event) {
     event.preventDefault();
-    const focused = this.get('focusedOption');
-    let index = this.get('options').indexOf(focused);
-    if (this.get('isDropdownOpen')) {
-      index = index - 1;
+    const currentIndex = this.get('focusedIndex');
+    let newIndex;
+    if (Ember.isNone(currentIndex)) {
+      newIndex = this.get('optionsLength') - 1;
+    } else if (currentIndex === 0) {
+      newIndex = this.get('optionsLength') - 1;
+    } else {
+      newIndex = currentIndex - 1;
     }
-    this.focusOptionAtIndex(index);
+    this.set('focusedIndex', newIndex);
+    this.set('isDropdownOpen', true);
   },
 
   focusNext: function(event) {
-    //TODO: Refactor with focusPrevious
     event.preventDefault();
-    let index = 0;
-    const focused = this.get('focusedOption');
-    if (focused) {
-      index = this.get('options').indexOf(focused);
-      if (this.get('isDropdownOpen')) {
-        index = index + 1;
-      }
+    const currentIndex = this.get('focusedIndex');
+    const lastIndex = this.get('optionsLength') - 1;
+    let newIndex;
+    if (Ember.isNone(currentIndex)) {
+      newIndex = 0;
+    } else if (currentIndex === lastIndex) {
+      newIndex = 0;
+    } else {
+      newIndex = currentIndex + 1;
     }
-    this.focusOptionAtIndex(index);
-  },
-
-  focusOptionAtIndex: function(index) {
-    const options = this.get('options');
-    if (index === -1) {
-      index = options.get('length') - 1;
-    } else if (index === options.get('length')) {
-      index = 0;
-    }
-    const option = this.get('options').objectAt(index);
-    if (!option) {
-      return;
-    }
-    this.focusOption(option);
-  },
-
-  focusOption: function(option) {
-    const focused = this.get('focusedOption');
-    if (focused) {
-      focused.blur();
-    }
-    this.set('focusedOption', option);
-    option.focus();
+    this.set('focusedIndex', newIndex);
+    this.set('isDropdownOpen', true);
   },
 
   selectOption: function(event) {
     event.preventDefault();
-    const focused = this.get('focusedOption');
-    if (focused) {
-      this.send('selectItem', focused.get('item'), focused.get('label'));
+    const focusedIndex = this.get('focusedIndex');
+    if (Ember.isPresent(focusedIndex)) {
+      this.set('selectedIndex', focusedIndex);
     }
     this.set('isDropdownOpen', false);
   },

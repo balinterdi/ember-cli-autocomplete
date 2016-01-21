@@ -4,7 +4,9 @@
     {{#auto-complete
           on-select=(action "selectArtist")
           on-input=(action "filterArtists")
-          class="autocomplete-container" as |autocomplete isDropdownOpen inputValue
+          optionsLength=matchingArtists.length
+          class="autocomplete-container" as |isDropdownOpen inputValue
+                                             focusedIndex selectedIndex
                                              toggleDropdown onSelect onInput|}}
       <div class="input-group">
         {{auto-complete-input
@@ -13,15 +15,16 @@
             type="text"
             class="combobox input-large form-control"
             placeholder="Select an artist"}}
-        {{#auto-complete-list autocomplete=autocomplete isVisible=isDropdownOpen class="typeahead typeahead-long dropdown-menu" as |list|}}
-          {{#each matchingArtists as |artist|}}
+        {{#auto-complete-list
+            isVisible=isDropdownOpen
+            class="typeahead typeahead-long dropdown-menu" as |list|}}
+          {{#each matchingArtists as |artist index|}}
             {{#auto-complete-option
-                id=artist.id
                 label=artist.name
                 item=artist
-                list=list
                 on-click=onSelect
-                isActive=(eq selectedArtist.id artist.id)}}
+                isFocused=(eq focusedIndex index)
+                isSelected=(eq selectedIndex index)}}
               <a href="#">{{artist.name}}</a>
             {{/auto-complete-option}}
           {{else}}

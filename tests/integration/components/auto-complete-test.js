@@ -43,22 +43,23 @@ test('it works', function(assert) {
     {{#auto-complete
         on-select=(action "selectArtist")
         on-input=(action "filterArtists")
-        as |ac isOpen inputValue toggleDropdown onSelect onInput|}}
+        as |isOpen inputValue focusedIndex selectedIndex
+            toggleDropdown onSelect onInput|}}
         {{auto-complete-input
             class="auto-complete-input"
             value=inputValue
             on-change=onInput
             type="text"}}
-        {{#auto-complete-list autocomplete=ac isVisible=isOpen as |list|}}
+        {{#auto-complete-list isVisible=isOpen as |list|}}
           {{#each matchingArtists as |artist|}}
             {{#auto-complete-option
-                id=artist.id
                 class="auto-complete-option"
                 label=artist.name
                 item=artist
                 list=list
                 on-click=onSelect
-                activeId=selectedArtist.id}}
+                isFocused=(eq focusedIndex index)
+                isSelected=(eq selectedIndex index)}}
               <a href="#">{{artist.name}}</a>
             {{/auto-complete-option}}
           {{else}}
