@@ -43,6 +43,22 @@ export default Ember.Component.extend({
     this.set('isBackspacing', true);
   },
 
+  setFocusedIndex(index) {
+    this.set('focusedIndex', index);
+  },
+
+  setSelectedIndex(index) {
+    this.set('selectedIndex', index);
+  },
+
+  resetFocusedIndex() {
+    this.setFocusedIndex(null);
+  },
+
+  resetSelectedIndex() {
+    this.setSelectedIndex(null);
+  },
+
   focusPrevious: function(event) {
     event.preventDefault();
     const currentIndex = this.get('focusedIndex');
@@ -54,8 +70,8 @@ export default Ember.Component.extend({
     } else {
       newIndex = currentIndex - 1;
     }
-    this.set('focusedIndex', newIndex);
-    this.set('isDropdownOpen', true);
+    this.setFocusedIndex(newIndex);
+    this.openDropdown();
   },
 
   focusNext: function(event) {
@@ -70,8 +86,8 @@ export default Ember.Component.extend({
     } else {
       newIndex = currentIndex + 1;
     }
-    this.set('focusedIndex', newIndex);
-    this.set('isDropdownOpen', true);
+    this.setFocusedIndex(newIndex);
+    this.openDropdown();
   },
 
   options: Ember.computed('items.[]', function() {
@@ -92,7 +108,7 @@ export default Ember.Component.extend({
     if (Ember.isPresent(focusedIndex)) {
       this.send('selectItem', focusedIndex);
     }
-    this.set('isDropdownOpen', false);
+    this.closeDropdown();
   },
 
   selectedItem: Ember.computed('selectedIndex', 'items.[]', function() {
@@ -115,18 +131,18 @@ export default Ember.Component.extend({
 
   actions: {
     selectItem(index) {
-      this.set('selectedIndex', index);
+      this.setSelectedIndex(index);
       let selectedItem = this.get('selectedItem');
       this.get('on-select')(selectedItem);
-      this.set('isDropdownOpen', false);
+      this.closeDropdown();
       this.set('inputValue', this._inputValueForItem(selectedItem));
     },
 
     inputDidChange(value) {
       this.get('on-input')(value);
-      this.set('focusedIndex', null);
-      this.set('selectedIndex', null);
-      this.set('isDropdownOpen', true);
+      this.resetFocusedIndex();
+      this.resetSelectedIndex();
+      this.openDropdown();
       return new Ember.RSVP.Promise((resolve, reject) => {
         if (this.get('isBackspacing')) {
           this.set('isBackspacing', false);
@@ -136,7 +152,7 @@ export default Ember.Component.extend({
             const firstItem = this.get('items.firstObject');
             if (firstItem) {
               this.get('on-select')(firstItem);
-              this.set('selectedIndex', 0);
+              this.setSelectedIndex(0);
               const inputValue = this._inputValueForItem(firstItem);
               this.set('inputValue', inputValue);
               Ember.run.next(this, () => {
