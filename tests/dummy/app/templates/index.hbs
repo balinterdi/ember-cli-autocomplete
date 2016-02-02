@@ -4,7 +4,7 @@
     {{#auto-complete
           on-select=(action "selectArtist")
           on-input=(action "filterArtists")
-          options=matchingArtists
+          items=matchingArtists
           displayProperty="name"
           class="autocomplete-container" as |isDropdownOpen inputValue options
                                              focusedIndex selectedIndex
@@ -18,14 +18,14 @@
             placeholder="Select an artist"}}
         {{#auto-complete-list
             isVisible=isDropdownOpen
-            class="typeahead typeahead-long dropdown-menu" as |list|}}
+            class="typeahead typeahead-long dropdown-menu"}}
           {{#each options as |option index|}}
             {{#auto-complete-option
-                item=option
+                index=index
                 on-click=onSelect
                 isFocused=(eq focusedIndex index)
                 isSelected=(eq selectedIndex index)}}
-              <a href="#">{{option.name}}</a>
+              <a href="#">{{option.value}}</a>
             {{/auto-complete-option}}
           {{else}}
             <li><a href="#">No results.</a></li>

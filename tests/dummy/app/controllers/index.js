@@ -11,7 +11,7 @@ const Artist = Ember.Object.extend({
   })
 });
 
-const artists = [
+const artists = Ember.A([
   Artist.create({
     id: 1,
     name: 'Mike McCready',
@@ -54,7 +54,7 @@ const artists = [
     img: 'images/john-paul-jones.jpg',
     bornIn: 1946
   })
-];
+]);
 
 export default Ember.Controller.extend({
   selectedArtist: null,

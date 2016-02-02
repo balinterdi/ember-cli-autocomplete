@@ -2,12 +2,12 @@ import Ember from 'ember';
 import { moduleForComponent, test } from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 
-const artists = [
+const artists = Ember.A([
   Ember.Object.create({ id: 1, name: "Eddie Vedder" }),
   Ember.Object.create({ id: 2, name: "Dave Grohl" }),
   Ember.Object.create({ id: 3, name: "John Paul Jones" }),
   Ember.Object.create({ id: 4, name: "Jimmy Page" })
-];
+]);
 
 function typeInInput(text) {
   this.$('.auto-complete-input')
@@ -15,7 +15,7 @@ function typeInInput(text) {
     .trigger('input');
 }
 
-moduleForComponent('auto-complete', 'Integration | Component | auto complete', {
+moduleForComponent('auto-complete', 'Integration | Component | auto-complete', {
   integration: true
 });
 
@@ -43,7 +43,7 @@ test('it works', function(assert) {
     {{#auto-complete
         on-select=(action "selectArtist")
         on-input=(action "filterArtists")
-        options=matchingArtists
+        items=matchingArtists
         displayProperty="name"
         as |isOpen inputValue options
             focusedIndex selectedIndex
@@ -57,11 +57,11 @@ test('it works', function(assert) {
           {{#each options as |option index|}}
             {{#auto-complete-option
                 class="auto-complete-option"
-                item=option
+                index=index
                 on-click=onSelect
                 isFocused=(eq focusedIndex index)
                 isSelected=(eq selectedIndex index)}}
-              <a href="#">{{option.name}}</a>
+              <a href="#">{{option.value}}</a>
             {{/auto-complete-option}}
           {{else}}
             <li><a href="#">No results.</a></li>

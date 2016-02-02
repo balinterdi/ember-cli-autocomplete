@@ -5,13 +5,12 @@ export default Ember.Component.extend({
   classNames: 'ember-autocomplete-option',
   classNameBindings: Ember.String.w('isSelected:active isFocused:focused'),
 
-  item: null,
+  index: null,
   'on-click': null,
   isFocused: false,
   isSelected: false,
 
   didClick: Ember.on('click', function() {
-    const item = this.get('item');
-    this.get('on-click')(item);
+    this.get('on-click')(this.get('index'));
   })
 });

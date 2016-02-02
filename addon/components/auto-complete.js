@@ -12,10 +12,10 @@ export default Ember.Component.extend({
   inputValue:       '',
   focusedIndex:     null,
   selectedIndex:    null,
-  options:          [],
+  items:            [],
   displayProperty:  '',
 
-  optionsLength: Ember.computed.readOnly('options.length'),
+  itemsLength: Ember.computed.readOnly('items.length'),
 
   isBackspacing: false,
 
@@ -34,7 +34,7 @@ export default Ember.Component.extend({
 
   keydownMap: {
     8:  'startBackspacing', // backspace
-    13: 'selectOption',  // return
+    13: 'selectItem',  // return
     27: 'closeDropdown', // escape
     38: 'focusPrevious', // up key
     40: 'focusNext', // down key
@@ -49,9 +49,9 @@ export default Ember.Component.extend({
     const currentIndex = this.get('focusedIndex');
     let newIndex;
     if (Ember.isNone(currentIndex)) {
-      newIndex = this.get('optionsLength') - 1;
+      newIndex = this.get('itemsLength') - 1;
     } else if (currentIndex === 0) {
-      newIndex = this.get('optionsLength') - 1;
+      newIndex = this.get('itemsLength') - 1;
     } else {
       newIndex = currentIndex - 1;
     }
@@ -62,7 +62,7 @@ export default Ember.Component.extend({
   focusNext: function(event) {
     event.preventDefault();
     const currentIndex = this.get('focusedIndex');
-    const lastIndex = this.get('optionsLength') - 1;
+    const lastIndex = this.get('itemsLength') - 1;
     let newIndex;
     if (Ember.isNone(currentIndex)) {
       newIndex = 0;
@@ -75,18 +75,28 @@ export default Ember.Component.extend({
     this.set('isDropdownOpen', true);
   },
 
-  selectOption: function(event) {
+  options: Ember.computed('items.[]', function() {
+    const displayProperty = this.get('displayProperty');
+    let options = this.get('items').map((item) => {
+      return Ember.Object.create({
+        id: item.get('id'),
+        value: item.get(displayProperty)
+      });
+    });
+    return Ember.A(options);
+  }),
+
+  selectItem: function(event) {
     event.preventDefault();
     const focusedIndex = this.get('focusedIndex');
     if (Ember.isPresent(focusedIndex)) {
-      this.set('selectedIndex', focusedIndex);
-      this.send('selectOption', this.get('selectedOption'));
+      this.send('selectItem', focusedIndex);
     }
     this.set('isDropdownOpen', false);
   },
 
-  selectedOption: Ember.computed('selectedIndex', 'options.[]', function() {
-    return this.get('options').objectAt(this.get('selectedIndex'));
+  selectedItem: Ember.computed('selectedIndex', 'items.[]', function() {
+    return this.get('items').objectAt(this.get('selectedIndex'));
   }),
 
   handleKeydown: Ember.on('keyDown', function(event) {
@@ -98,16 +108,18 @@ export default Ember.Component.extend({
     }
   }),
 
-  _displayForOption(option) {
-    const displayProperty = this.get('displayProperty');
-    return option.get(displayProperty);
+  _inputValueForItem(item) {
+    let displayProperty = this.get('displayProperty');
+    return item.get(displayProperty);
   },
 
   actions: {
-    selectOption(option) {
-      this.get('on-select')(option);
+    selectItem(index) {
+      this.set('selectedIndex', index);
+      let selectedItem = this.get('selectedItem');
+      this.get('on-select')(selectedItem);
       this.set('isDropdownOpen', false);
-      this.set('inputValue', this._displayForOption(option));
+      this.set('inputValue', this._inputValueForItem(selectedItem));
     },
 
     inputDidChange(value) {
@@ -120,10 +132,10 @@ export default Ember.Component.extend({
           reject();
         } else {
           Ember.run.scheduleOnce('afterRender', this, function() {
-            const firstOption = this.get('options.firstObject');
-            if (firstOption) {
-              const inputValue = this._displayForOption(firstOption);
-              this.get('on-select')(firstOption);
+            const firstItem = this.get('items.firstObject');
+            if (firstItem) {
+              this.get('on-select')(firstItem);
+              const inputValue = this._inputValueForItem(firstItem);
               this.set('inputValue', inputValue);
               Ember.run.next(this, () => {
                 resolve({ start: value.length, end: inputValue.length });
