@@ -7,24 +7,17 @@ export default Ember.Component.extend({
 
   layout: layout,
 
-  isDropdownOpen: false,
-  input: null,
-  inputValue: '',
-  list: null,
-  focusedIndex: null,
-  selectedIndex: null,
-  optionsLength: 0,
+  isDropdownOpen:   false,
+  input:            null,
+  inputValue:       '',
+  focusedIndex:     null,
+  selectedIndex:    null,
+  options:          [],
+  displayProperty:  '',
+
+  optionsLength: Ember.computed.readOnly('options.length'),
 
   isBackspacing: false,
-  options: Ember.computed.reads('list.options'),
-
-  registerInput(input) {
-    this.set('input', input);
-  },
-
-  registerList(list) {
-    this.set('list', list);
-  },
 
   toggleDropdown() {
     this.toggleProperty('isDropdownOpen');
@@ -127,11 +120,12 @@ export default Ember.Component.extend({
           reject();
         } else {
           Ember.run.scheduleOnce('afterRender', this, function() {
-            const firstOption = this.get('list.firstOption');
+            const firstOption = this.get('options.firstObject');
             if (firstOption) {
-              const autocompletedLabel = firstOption.get('label');
+              const displayProperty = this.get('displayProperty');
+              const autocompletedLabel = firstOption.get(displayProperty);
               this.set('focusedOption', firstOption);
-              this.get('on-select')(firstOption.get('item'));
+              this.get('on-select')(firstOption);
               this.set('inputValue', autocompletedLabel);
               Ember.run.next(this, () => {
                 resolve({ start: value.length, end: autocompletedLabel.length });

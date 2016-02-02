@@ -4,7 +4,8 @@
     {{#auto-complete
           on-select=(action "selectArtist")
           on-input=(action "filterArtists")
-          optionsLength=matchingArtists.length
+          options=matchingArtists
+          displayProperty="name"
           class="autocomplete-container" as |isDropdownOpen inputValue
                                              focusedIndex selectedIndex
                                              toggleDropdown onSelect onInput|}}

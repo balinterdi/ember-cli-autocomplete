@@ -35,7 +35,7 @@ test('it works', function(assert) {
         searchTerm = searchTerm.toLowerCase();
         return artist.get('name').toLowerCase().indexOf(searchTerm) === 0;
       });
-      this.set('matchingArtists', matchingArtists);
+      this.set('matchingArtists', Ember.A(matchingArtists));
     }
   };
 
@@ -43,6 +43,8 @@ test('it works', function(assert) {
     {{#auto-complete
         on-select=(action "selectArtist")
         on-input=(action "filterArtists")
+        options=matchingArtists
+        displayProperty="name"
         as |isOpen inputValue focusedIndex selectedIndex
             toggleDropdown onSelect onInput|}}
         {{auto-complete-input
