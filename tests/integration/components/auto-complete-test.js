@@ -54,13 +54,13 @@ test('it works', function(assert) {
             on-change=onInput
             type="text"}}
         {{#auto-complete-list isVisible=isOpen}}
-          {{#each options as |option index|}}
+          {{#each options as |option|}}
             {{#auto-complete-option
                 class="auto-complete-option"
-                index=index
+                index=option.index
                 on-click=onSelect
-                isFocused=(eq focusedIndex index)
-                isSelected=(eq selectedIndex index)}}
+                isFocused=(eq focusedIndex option.index)
+                isSelected=(eq selectedIndex option.index)}}
               <a href="#">{{option.value}}</a>
             {{/auto-complete-option}}
           {{else}}

@@ -9,8 +9,12 @@ function getValue(obj) {
   return obj.get('value');
 }
 
+function getIndex(obj) {
+  return obj.get('index');
+}
+
 test('#options', function(assert) {
-  assert.expect(2);
+  assert.expect(3);
 
   let component = this.subject();
 
@@ -32,5 +36,5 @@ test('#options', function(assert) {
   assert.equal(options.length, 4, "It has the same number of items as the `items` input");
   assert.deepEqual(options.map(getValue), ['Eddie Vedder', 'Dave Grohl', 'John Paul Jones', 'Jimmy Page'],
                    "For each option, `value` is extracted from the displayProperty of the corresponding item");
-
+  assert.deepEqual(options.map(getIndex), [0, 1, 2, 3], "A zero-based index is assigned to each option");
 });

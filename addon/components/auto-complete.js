@@ -77,9 +77,10 @@ export default Ember.Component.extend({
 
   options: Ember.computed('items.[]', function() {
     const displayProperty = this.get('displayProperty');
-    let options = this.get('items').map((item) => {
+    let options = this.get('items').map((item, index) => {
       return Ember.Object.create({
         id: item.get('id'),
+        index: index,
         value: item.get(displayProperty)
       });
     });
