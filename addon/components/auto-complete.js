@@ -29,7 +29,6 @@ export default Ember.Component.extend({
 
   closeDropdown: function() {
     this.set('isDropdownOpen', false);
-    this.removeFocusedOption();
   },
 
   keydownMap: {
@@ -126,6 +125,7 @@ export default Ember.Component.extend({
     inputDidChange(value) {
       this.get('on-input')(value);
       this.set('focusedIndex', null);
+      this.set('selectedIndex', null);
       this.set('isDropdownOpen', true);
       return new Ember.RSVP.Promise((resolve, reject) => {
         if (this.get('isBackspacing')) {
@@ -136,6 +136,7 @@ export default Ember.Component.extend({
             const firstItem = this.get('items.firstObject');
             if (firstItem) {
               this.get('on-select')(firstItem);
+              this.set('selectedIndex', 0);
               const inputValue = this._inputValueForItem(firstItem);
               this.set('inputValue', inputValue);
               Ember.run.next(this, () => {
