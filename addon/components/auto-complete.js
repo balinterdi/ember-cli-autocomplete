@@ -21,9 +21,6 @@ export default Ember.Component.extend({
 
   toggleDropdown() {
     this.toggleProperty('isDropdownOpen');
-    if (!this.get('isDropdownOpen')) {
-      this.removeFocusedOption();
-    }
   },
 
   openDropdown() {
@@ -33,14 +30,6 @@ export default Ember.Component.extend({
   closeDropdown: function() {
     this.set('isDropdownOpen', false);
     this.removeFocusedOption();
-  },
-
-  removeFocusedOption() {
-    const focused = this.get('focusedOption');
-    if (focused) {
-      focused.blur();
-      this.set('focusedOption', null);
-    }
   },
 
   keydownMap: {
@@ -91,9 +80,14 @@ export default Ember.Component.extend({
     const focusedIndex = this.get('focusedIndex');
     if (Ember.isPresent(focusedIndex)) {
       this.set('selectedIndex', focusedIndex);
+      this.send('selectOption', this.get('selectedOption'));
     }
     this.set('isDropdownOpen', false);
   },
+
+  selectedOption: Ember.computed('selectedIndex', 'options.[]', function() {
+    return this.get('options').objectAt(this.get('selectedIndex'));
+  }),
 
   handleKeydown: Ember.on('keyDown', function(event) {
     const map = this.get('keydownMap');
@@ -104,15 +98,21 @@ export default Ember.Component.extend({
     }
   }),
 
+  _displayForOption(option) {
+    const displayProperty = this.get('displayProperty');
+    return option.get(displayProperty);
+  },
+
   actions: {
-    selectItem(item, value) {
-      this.get('on-select')(item);
+    selectOption(option) {
+      this.get('on-select')(option);
       this.set('isDropdownOpen', false);
-      this.set('inputValue', value);
+      this.set('inputValue', this._displayForOption(option));
     },
 
     inputDidChange(value) {
       this.get('on-input')(value);
+      this.set('focusedIndex', null);
       this.set('isDropdownOpen', true);
       return new Ember.RSVP.Promise((resolve, reject) => {
         if (this.get('isBackspacing')) {
@@ -122,13 +122,11 @@ export default Ember.Component.extend({
           Ember.run.scheduleOnce('afterRender', this, function() {
             const firstOption = this.get('options.firstObject');
             if (firstOption) {
-              const displayProperty = this.get('displayProperty');
-              const autocompletedLabel = firstOption.get(displayProperty);
-              this.set('focusedOption', firstOption);
+              const inputValue = this._displayForOption(firstOption);
               this.get('on-select')(firstOption);
-              this.set('inputValue', autocompletedLabel);
+              this.set('inputValue', inputValue);
               Ember.run.next(this, () => {
-                resolve({ start: value.length, end: autocompletedLabel.length });
+                resolve({ start: value.length, end: inputValue.length });
               });
             }
           });
