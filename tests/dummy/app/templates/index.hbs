@@ -6,32 +6,30 @@
           on-input=(action "filterArtists")
           items=matchingArtists
           displayProperty="name"
-          class="autocomplete-container" as |isDropdownOpen inputValue options
-                                             focusedIndex selectedIndex
-                                             toggleDropdown onSelect onInput|}}
+          class="autocomplete-container" as |params|}}
       <div class="input-group">
         {{auto-complete-input
-            value=inputValue
-            on-change=onInput
+            value=params.inputValue
+            on-change=params.onInput
             type="text"
             class="combobox input-large form-control"
             placeholder="Select an artist"}}
         {{#auto-complete-list
-            isVisible=isDropdownOpen
+            isVisible=params.isOpen
             class="typeahead typeahead-long dropdown-menu"}}
-          {{#each options as |option|}}
+          {{#each params.options as |option|}}
             {{#auto-complete-option
                 index=option.index
-                on-click=onSelect
-                isFocused=(eq focusedIndex option.index)
-                isSelected=(eq selectedIndex option.index)}}
+                on-click=params.onSelect
+                isFocused=(eq params.focusedIndex option.index)
+                isSelected=(eq params.selectedIndex option.index)}}
               <a href="#">{{option.value}}</a>
             {{/auto-complete-option}}
           {{else}}
             <li><a href="#">No results.</a></li>
           {{/each}}
         {{/auto-complete-list}}
-        {{#auto-complete-dropdown-toggle on-click=toggleDropdown class="input-group-addon dropdown-toggle"}}
+        {{#auto-complete-dropdown-toggle on-click=params.toggleDropdown class="input-group-addon dropdown-toggle"}}
           <span class="caret"></span>
         {{/auto-complete-dropdown-toggle}}
       </div>

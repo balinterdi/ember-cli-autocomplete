@@ -145,6 +145,7 @@ export default Ember.Component.extend({
       this.openDropdown();
       return new Ember.RSVP.Promise((resolve, reject) => {
         if (this.get('isBackspacing')) {
+          this.set('inputValue', value);
           this.set('isBackspacing', false);
           reject();
         } else {

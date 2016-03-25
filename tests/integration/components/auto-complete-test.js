@@ -45,29 +45,27 @@ test('it works', function(assert) {
         on-input=(action "filterArtists")
         items=matchingArtists
         displayProperty="name"
-        as |isOpen inputValue options
-            focusedIndex selectedIndex
-            toggleDropdown onSelect onInput|}}
+        as |params|}}
         {{auto-complete-input
             class="auto-complete-input"
-            value=inputValue
-            on-change=onInput
+            value=params.inputValue
+            on-change=params.onInput
             type="text"}}
-        {{#auto-complete-list isVisible=isOpen}}
-          {{#each options as |option|}}
+        {{#auto-complete-list isVisible=params.isOpen}}
+          {{#each params.options as |option|}}
             {{#auto-complete-option
                 class="auto-complete-option"
                 index=option.index
-                on-click=onSelect
-                isFocused=(eq focusedIndex option.index)
-                isSelected=(eq selectedIndex option.index)}}
+                on-click=params.onSelect
+                isFocused=(eq params.focusedIndex option.index)
+                isSelected=(eq params.selectedIndex option.index)}}
               <a href="#">{{option.value}}</a>
             {{/auto-complete-option}}
           {{else}}
             <li><a href="#">No results.</a></li>
           {{/each}}
         {{/auto-complete-list}}
-        {{#auto-complete-dropdown-toggle on-click=toggleDropdown}}
+        {{#auto-complete-dropdown-toggle on-click=params.toggleDropdown}}
           <span class="caret"></span>
         {{/auto-complete-dropdown-toggle}}
     {{/auto-complete}}
