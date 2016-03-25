@@ -1,13 +1,4 @@
 /* jshint node: true */
-const contentSecurityPolicy = {
-  'default-src': "'none'",
-  'script-src': "'self'",
-  'font-src': "'self'",
-  'connect-src': "'self' localhost:*",
-  'img-src': "'self'",
-  'style-src': "'self' 'unsafe-inline'",
-  'media-src': "'self'"
-};
 
 module.exports = function(environment) {
   var ENV = {
@@ -15,7 +6,6 @@ module.exports = function(environment) {
     environment: environment,
     baseURL: '/',
     locationType: 'auto',
-    contentSecurityPolicy: contentSecurityPolicy,
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
